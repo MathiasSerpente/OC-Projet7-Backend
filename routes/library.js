@@ -11,7 +11,7 @@ router.get('/bestrating', libraryCtrl.getBestBooks);
 router.get('/:id', libraryCtrl.getOneBook);
 router.post('/', auth, multer, libraryCtrl.createBook);
 router.post('/:id/rating', auth, libraryCtrl.createRating);
-router.put('/:id', auth, libraryCtrl.modifyBook);
+router.put('/:id', auth, multer, libraryCtrl.modifyBook);
 router.delete('/:id', auth, libraryCtrl.deleteBook);
 
 module.exports = router;

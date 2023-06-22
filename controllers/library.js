@@ -33,7 +33,6 @@ exports.createBook = (req, res, next) => {
     }`,
     averageRating: bookObject.ratings[0].grade,
   });
-
   book
     .save()
     .then(() => {
@@ -44,7 +43,40 @@ exports.createBook = (req, res, next) => {
     });
 };
 
-exports.createRating = (req, res, next) => {};
+exports.createRating = (req, res, next) => {
+  Book.findOne({ _id: req.params.id })
+    .then((book) => {
+      const userIdCheck = book.ratings.includes(
+        (rating) => rating.userId == req.body.userId
+      );
+      if (!userIdCheck && req.body.rating >= 0 && req.body.rating <= 5) {
+        book.ratings.push({
+          userId: req.auth.userId,
+          grade: req.body.rating,
+        });
+        let sum = 0;
+        for (rating of book.ratings) {
+          sum += rating.grade;
+        }
+        let average = sum / book.ratings.length;
+        average = average.toFixed(1);
+        book.averageRating = average;
+        return book
+          .save()
+          .then((book) => {
+            res.status(200).json(book);
+          })
+          .catch((error) => {
+            res.status(400).json({ error });
+          });
+      } else {
+        res.status(404).json({ message: 'Book already rated' });
+      }
+    })
+    .catch((error) => {
+      res.status(404).json({ error });
+    });
+};
 
 exports.modifyBook = (req, res, next) => {
   const bookObject = req.file
@@ -55,7 +87,6 @@ exports.modifyBook = (req, res, next) => {
         }`,
       }
     : { ...req.body };
-
   delete bookObject._userId;
   Book.findOne({ _id: req.params.id })
     .then((book) => {

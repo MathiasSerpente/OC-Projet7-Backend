@@ -3,7 +3,7 @@ const router = express.Router(); // Création d'un objet Router
 
 const auth = require('../middleware/auth'); // Importation du middleware d'authentification
 const multer = require('../middleware/multer-config'); // Importation du middleware pour la gestion des fichiers
-const esharp = require('../middleware/sharp-config');
+const esharp = require('../middleware/sharp-config'); // Importation du middleware pour le traitement des images
 
 const libraryCtrl = require('../controllers/library'); // Importation du contrôleur pour les bibliothèques
 

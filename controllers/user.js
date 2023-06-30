@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
       user
         .save()
         .then(() => res.status(201).json({ message: 'User created!' })) // Succès : utilisateur créé
-        .catch((error) => res.status(400).json({ error })); // Erreur : lors de la sauvegarde de l'utilisateur
+        .catch((error) => res.status(500).json({ error })); // Erreur : lors de la sauvegarde de l'utilisateur
     })
     .catch((error) => res.status(500).json({ error })); // Erreur : lors du hachage du mot de passe
 };
